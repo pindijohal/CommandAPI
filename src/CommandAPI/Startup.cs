@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using Npgsql;
 
 namespace CommandAPI
@@ -35,7 +36,10 @@ namespace CommandAPI
             services.AddDbContext<CommandContext>(opt => opt.UseNpgsql
                 (builder.ConnectionString));
 
-			services.AddControllers();
+			services.AddControllers().AddNewtonsoftJson(s =>
+                {
+                    s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                });
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
